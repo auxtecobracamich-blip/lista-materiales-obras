@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Materiales - Obras</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .select-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .select-group label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        select {
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .input-group {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 12px;
+            margin-bottom: 20px;
+            align-items: flex-end;
+        }
+        
+        input {
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-success {
+            background: #48bb78;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-success:hover {
+            background: #38a169;
+        }
+        
+        .btn-warning {
+            background: #ed8936;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-warning:hover {
+            background: #dd6b20;
+        }
+        
+        .btn-danger {
+            background: #f56565;
+            color: white;
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+        
+        .btn-secondary {
+            background: #cbd5e0;
+            color: #2d3748;
+            flex: 1;
+        }
+        
+        .btn-secondary:hover {
+            background: #a0aec0;
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        thead {
+            background: #f7fafc;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #4a5568;
+        }
+        
+        tbody tr:hover {
+            background: #f7fafc;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #a0aec0;
+        }
+        
+        .empty-state p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .info-box {
+            background: #edf2f7;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #2d3748;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .tab {
+            padding: 15px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #718096;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        
+        .tab:hover {
+            color: #667eea;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #bee3f8;
+            color: #2c5282;
+        }
+        
+        .badge-sandra {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+        
+        .badge-monse {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        @media (max-width: 768px) {
+            .controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-buttons .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Gestor de Materiales</h1>
+            <p>Control de compras para proyectos de construcción</p>
+        </div>
+        
+        <div class="content">
+            <div class="controls">
+                <div class="select-group">
+                    <label for="obra">Selecciona la obra:</label>
+                    <select id="obra">
+                        <option value="arboledas">Obra Arboledas</option>
+                        <option value="bodega">Obra Bodega de Lomas</option>
+                    </select>
+                </div>
+                <div class="select-group">
+                    <label for="persona">¿Quién agrega?</label>
+                    <select id="persona">
+                        <option value="sandra">Ing Sandra</option>
+                        <option value="monse">Ing Monse</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <input type="text" id="material" placeholder="Nombre del material (ej: Cemento, Arena, Varilla)">
+                <input type="text" id="unidad" placeholder="Unidad (m, kg, L, sacos, etc)">
+                <input type="number" id="cantidad" placeholder="Cantidad" min="0.1" step="0.1">
+                <button class="btn btn-primary" onclick="agregarMaterial()">+ Agregar</button>
+            </div>
+            
+            <div id="tabla-container"></div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-success" onclick="enviarWhatsApp()">📱 Enviar por WhatsApp</button>
+                <button class="btn btn-warning" onclick="descargarExcel()">📊 Descargar Excel</button>
+                <button class="btn btn-secondary" onclick="limpiarLista()">🗑️ Limpiar lista</button>
+            </div>
+            
+            <div class="info-box">
+                💡 <strong>Tip:</strong> Los cambios se guardan automáticamente en tu navegador. Puedes agregar materiales en cualquier momento y compartir la lista el lunes.
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Números de WhatsApp
+        const WHATSAPP = {
+            sandra: '5214431558047',
+            monse: '5217551335722'
+        };
+        
+        // Inicializar datos
+        function inicializar() {
+            const datos = localStorage.getItem('materialesDatos');
+            if (!datos) {
+                localStorage.setItem('materialesDatos', JSON.stringify({
+                    arboledas: [],
+                    bodega: []
+                }));
+            }
+            renderizar();
+        }
+        
+        function agregarMaterial() {
+            const obra = document.getElementById('obra').value;
+            const persona = document.getElementById('persona').value;
+            const material = document.getElementById('material').value.trim();
+            const unidad = document.getElementById('unidad').value.trim();
+            const cantidad = parseFloat(document.getElementById('cantidad').value);
+            
+            if (!material || !unidad || !cantidad || cantidad <= 0) {
+                alert('Por favor completa todos los campos correctamente');
+                return;
+            }
+            
+            const datos = JSON.parse(localStorage.getItem('materialesDatos'));
+            datos[obra].push({
+                id: Date.now(),
+                material,
+                unidad,
+                cantidad,
+                persona,
+                fecha: new Date().toLocaleDateString()
+            });
+            
+            localStorage.setItem('materialesDatos', JSON.stringify(datos));
+            document.getElementById('material').value = '';
+            document.getElementById('unidad').value = '';
+            document.getElementById('cantidad').value = '';
+            document.getElementById('material').focus();
+            renderizar();
+        }
+        
+        function eliminarMaterial(obra, id) {
+            if (confirm('¿Eliminar este material?')) {
+                const datos = JSON.parse(localStorage.getItem('materialesDatos'));
+                datos[obra] = datos[obra].filter(item => item.id !== id);
+                localStorage.setItem('materialesDatos', JSON.stringify(datos));
+                renderizar();
+            }
+        }
+        
+        function renderizar() {
+            const obra = document.getElementById('obra').value;
+            const datos = JSON.parse(localStorage.getItem('materialesDatos'));
+            const materiales = datos[obra];
+            
+            let html = '';
+            
+            if (materiales.length === 0) {
+                html = '<div class="empty-state"><p>📦 Sin materiales agregados</p><p style="font-size: 13px;">Agrega tu primer material arriba</p></div>';
+            } else {
+                html = `
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Material</th>
+                                    <th style="width: 100px;">Unidad</th>
+                                    <th style="width: 100px;">Cantidad</th>
+                                    <th style="width: 140px;">Agregó</th>
+                                    <th style="width: 80px;">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                let totalCantidad = 0;
+                materiales.forEach(item => {
+                    const badge = item.persona === 'sandra' 
+                        ? '<span class="badge badge-sandra">Ing Sandra</span>'
+                        : '<span class="badge badge-monse">Ing Monse</span>';
+                    
+                    html += `
+                        <tr>
+                            <td><strong>${item.material}</strong></td>
+                            <td>${item.unidad}</td>
+                            <td style="text-align: center; font-weight: 600;">${item.cantidad}</td>
+                            <td>${badge}</td>
+                            <td style="text-align: center;">
+                                <button class="btn btn-danger" onclick="eliminarMaterial('${obra}', ${item.id})">✕</button>
+                            </td>
+                        </tr>
+                    `;
+                    totalCantidad += item.cantidad;
+                });
+                
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('tabla-container').innerHTML = html;
+        }
+        
+        function enviarWhatsApp() {
+            const obra = document.getElementById('obra').value;
+            const obraNombre = obra === 'arboledas' ? 'Obra Arboledas' : 'Obra Bodega de Lomas';
+            const datos = JSON.parse(localStorage.getItem('materialesDatos'));
+            const materiales = datos[obra];
+            
+            if (materiales.length === 0) {
+                alert('Agrega materiales antes de enviar');
+                return;
+            }
+            
+            let mensaje = `📋 *Lista de Materiales - ${obraNombre}*\n`;
+            mensaje += `📅 ${new Date().toLocaleDateString('es-MX')}\n\n`;
+            
+            materiales.forEach(item => {
+                mensaje += `• ${item.material}\n  ${item.cantidad} ${item.unidad}\n`;
+            });
+            
+            mensaje += `\n👤 Agregado por: `;
+            const personas = [...new Set(materiales.map(m => m.persona))];
+            mensaje += personas.map(p => p === 'sandra' ? 'Ing Sandra' : 'Ing Monse').join(' y ');
+            
+            const enlace = `https://wa.me/${WHATSAPP.sandra}?text=${encodeURIComponent(mensaje)}`;
+            window.open(enlace, '_blank');
+        }
+        
+        function descargarExcel() {
+            const obra = document.getElementById('obra').value;
+            const obraNombre = obra === 'arboledas' ? 'Obra Arboledas' : 'Obra Bodega de Lomas';
+            const datos = JSON.parse(localStorage.getItem('materialesDatos'));
+            const materiales = datos[obra];
+            
+            if (materiales.length === 0) {
+                alert('Agrega materiales antes de descargar');
+                return;
+            }
+            
+            let csv = 'MATERIAL,UNIDAD,CANTIDAD,AGREGADO POR,FECHA\n';
+            materiales.forEach(item => {
+                const persona = item.persona === 'sandra' ? 'Ing Sandra' : 'Ing Monse';
+                csv += `"${item.material}","${item.unidad}",${item.cantidad},"${persona}","${item.fecha}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `Materiales_${obraNombre}_${new Date().toISOString().slice(0,10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        function limpiarLista() {
+            if (confirm('⚠️ ¿Eliminar TODOS los materiales de esta obra? Esta acción no se puede deshacer.')) {
+                const obra = document.getElementById('obra').value;
+                const datos = JSON.parse(localStorage.getItem('materialesDatos'));
+                datos[obra] = [];
+                localStorage.setItem('materialesDatos', JSON.stringify(datos));
+                renderizar();
+            }
+        }
+        
+        // Event listeners
+        document.getElementById('obra').addEventListener('change', renderizar);
+        document.getElementById('material').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('unidad').focus();
+            }
+        });
+        document.getElementById('unidad').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('cantidad').focus();
+            }
+        });
+        document.getElementById('cantidad').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                agregarMaterial();
+            }
+        });
+        
+        // Inicializar
+        inicializar();
+    </script>
+</body>
+</html>
